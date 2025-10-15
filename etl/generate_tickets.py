@@ -52,7 +52,7 @@ def generate_tickets(num_tickets, customers_df, agents_df):
 
         ticket['resolve_at'] = ticket['first_response_at'] + pd.Timedelta(hours=resolve_hours)
 
-        cutoff = pd.Timestamp("2025-06-01")
+        cutoff = pd.Timestamp("2024-11-01")
         ticket['status'] = "Closed" if ticket['resolve_at'] <= cutoff else "Open"
 
         escalation_base = 0.03
