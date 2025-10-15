@@ -34,3 +34,20 @@ CREATE TABLE Tickets (
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
     FOREIGN KEY (agent_id) REFERENCES Agents(agent_id)
 );
+
+-- Create escaltions table
+CREATE TABLE Escalations (
+    escalation_id INTEGER,
+    ticket_id INTEGER NOT NULL,
+    level INTEGER NOT NULL,
+    handled_by INTEGER NOT NULL,
+    escalation_date DATETIME NOT NULL,
+    PRIMARY KEY (escalation_id),
+    FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id),
+    FOREIGN KEY (handled_by) REFERENCES Tickets(agent_id)
+);
+
+-- Include a couple indexes although not strictly neccessary due to small scale of database
+CREATE INDEX idx_tickets_agent ON Tickets(agent_id);
+CREATE INDEX idx_tickets_customer ON Tickets(customer_id);
+CREATE INDEX idx_tickets_cat_pri ON Tickets(category, priority);
