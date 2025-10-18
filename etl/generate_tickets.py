@@ -50,12 +50,10 @@ def generate_tickets(num_tickets, customers_df, agents_df):
         # catch any negative values as a result of normal distribution 
         resolve_hours = max(0.5, resolve_hours)
 
-        ticket['resolve_at'] = (
-            ticket['first_response_at'] + pd.Timedelta(hours=resolve_hours)
-        ).dt.round('s')
-        
+        ticket['resolved_at'] = ticket['first_response_at'] + pd.Timedelta(hours=round(resolve_hours, 2))
+
         cutoff = pd.Timestamp("2024-11-01")
-        ticket['status'] = "Closed" if ticket['resolve_at'] <= cutoff else "Open"
+        ticket['status'] = "Closed" if ticket['resolved_at'] <= cutoff else "Open"
 
         escalation_base = 0.03
         if ticket['priority'] == "High":

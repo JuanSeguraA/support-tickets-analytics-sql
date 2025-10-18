@@ -1,7 +1,13 @@
+DROP TABLE IF EXISTS Customers;
+DROP TABLE IF EXISTS Agents;
+DROP TABLE IF EXISTS Tickets;
+DROP TABLE IF EXISTS Escalations;
+
 -- Create Customer table
 CREATE TABLE Customers (
     customer_id INTEGER,
-    name TEXT NOT NULL,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
     email TEXT NOT NULL,
     phone TEXT NOT NULL,
     account_type TEXT NOT NULL,
@@ -11,9 +17,11 @@ CREATE TABLE Customers (
 -- Create Agent table
 CREATE TABLE Agents (
     agent_id INTEGER NOT NULL,
-    name TEXT NOT NULL,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
     email TEXT NOT NULL,
-    role TEXT NOT NULL,
+    role TEXT CHECK (role IN ('Support', 'Senior Support', 'Team Lead', 'Manager')),
+    is_active BOOLEAN,
     PRIMARY KEY (agent_id)
 );
 
@@ -27,7 +35,7 @@ CREATE TABLE Tickets (
     status TEXT NOT NULL,
     created_at DATETIME NOT NULL, 
     first_response_at DATETIME,
-    resolve_at DATETIME, 
+    resolved_at DATETIME, 
     escalated_flag INTEGER NOT NULL DEFAULT 0,
     reopen_count INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (ticket_id),
@@ -44,7 +52,7 @@ CREATE TABLE Escalations (
     escalation_date DATETIME NOT NULL,
     PRIMARY KEY (escalation_id),
     FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id),
-    FOREIGN KEY (handled_by) REFERENCES Tickets(agent_id)
+    FOREIGN KEY (handled_by) REFERENCES Agents(agent_id)
 );
 
 -- Include a couple indexes although not strictly neccessary due to small scale of database
